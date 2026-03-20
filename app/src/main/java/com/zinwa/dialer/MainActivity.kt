@@ -61,10 +61,18 @@ class MainActivity : ComponentActivity() {
 
     private val roleRequestLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
-    ) { result ->
+    ) { _ ->
         roleRequestInFlight = false
         val roleManager = getSystemService(RoleManager::class.java)
-        if (!roleManager.isRoleHeld(RoleManager.ROLE_DIALER)) {
+        if (roleManager.isRoleHeld(RoleManager.ROLE_DIALER)) {
+            // Role granted — if this is the first setup, close the app
+            val prefs = getSharedPreferences("zinwa", MODE_PRIVATE)
+            if (!prefs.getBoolean("setup_complete", false)) {
+                prefs.edit().putBoolean("setup_complete", true).apply()
+                finish()
+                return@registerForActivityResult
+            }
+        } else {
             // User declined — don't spam the picker again this session
             roleDeclinedThisSession = true
         }
@@ -109,20 +117,26 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         viewModel.onPermissionsReady()
-        // Launch the system "Set default phone app" picker if Zinwa doesn't hold
-        // ROLE_DIALER. Guards:
-        //   roleRequestInFlight  – picker is already visible, don't re-launch
-        //   roleDeclinedThisSession – user cancelled this session; show a banner
-        //                            instead of looping the picker endlessly
-        val roleManager = getSystemService(RoleManager::class.java)
-        if (!roleManager.isRoleHeld(RoleManager.ROLE_DIALER)
-            && !roleRequestInFlight
-            && !roleDeclinedThisSession
+
+        val prefs = getSharedPreferences("zinwa", MODE_PRIVATE)
+
+        // First launch flow: permissions → accessibility prompt → default dialer.
+        // Only show accessibility prompt after all permissions are granted.
+        val allPermissionsGranted = REQUIRED_PERMISSIONS.all {
+            androidx.core.content.ContextCompat.checkSelfPermission(this, it) ==
+                android.content.pm.PackageManager.PERMISSION_GRANTED
+        }
+
+        if (allPermissionsGranted
+            && !isAccessibilityServiceEnabled()
+            && !prefs.getBoolean("accessibility_prompted", false)
+            && !showAccessibilityPrompt.value
         ) {
-            roleRequestInFlight = true
-            roleRequestLauncher.launch(
-                roleManager.createRequestRoleIntent(RoleManager.ROLE_DIALER)
-            )
+            prefs.edit().putBoolean("accessibility_prompted", true).apply()
+            promptAccessibilityService()
+            // Don't launch role picker yet — wait for dialog dismissal
+        } else if (allPermissionsGranted) {
+            launchRolePickerIfNeeded()
         }
         com.zinwa.dialer.service.ToolbarButtonHandler.onCallPressed = {
             runOnUiThread { dialOrOpenKeypad() }
@@ -275,15 +289,25 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        val prefs = getSharedPreferences("zinwa", MODE_PRIVATE)
-        if (!isAccessibilityServiceEnabled() && !prefs.getBoolean("accessibility_prompted", false)) {
-            prefs.edit().putBoolean("accessibility_prompted", true).apply()
-            promptAccessibilityService()
-        }
+        // Accessibility prompt is now shown before the default dialer role request
+        // in onResume(), so it's not needed here.
     }
 
     private fun promptAccessibilityService() {
         showAccessibilityPrompt.value = true
+    }
+
+    private fun launchRolePickerIfNeeded() {
+        val roleManager = getSystemService(RoleManager::class.java)
+        if (!roleManager.isRoleHeld(RoleManager.ROLE_DIALER)
+            && !roleRequestInFlight
+            && !roleDeclinedThisSession
+        ) {
+            roleRequestInFlight = true
+            roleRequestLauncher.launch(
+                roleManager.createRequestRoleIntent(RoleManager.ROLE_DIALER)
+            )
+        }
     }
 
     @Composable
@@ -291,7 +315,10 @@ class MainActivity : ComponentActivity() {
         if (!showAccessibilityPrompt.value) return
 
         androidx.compose.material3.AlertDialog(
-            onDismissRequest = { showAccessibilityPrompt.value = false },
+            onDismissRequest = {
+                showAccessibilityPrompt.value = false
+                launchRolePickerIfNeeded()
+            },
             icon = {
                 androidx.compose.material3.Icon(
                     imageVector = Icons.Filled.Phone,
@@ -327,6 +354,7 @@ class MainActivity : ComponentActivity() {
             dismissButton = {
                 androidx.compose.material3.TextButton(onClick = {
                     showAccessibilityPrompt.value = false
+                    launchRolePickerIfNeeded()
                 }) {
                     androidx.compose.material3.Text("Not now")
                 }

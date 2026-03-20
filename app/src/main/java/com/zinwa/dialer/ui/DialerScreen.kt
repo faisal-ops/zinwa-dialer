@@ -16,10 +16,8 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import android.app.Activity
 import android.content.Intent
-import android.content.SharedPreferences
 import android.net.Uri
 import android.provider.ContactsContract
-import android.provider.Settings
 import android.speech.RecognizerIntent
 import android.telecom.Call
 import com.zinwa.dialer.ActiveCallInfo
@@ -965,21 +963,10 @@ private fun ReturnToCallBanner(info: ActiveCallInfo, onClick: () -> Unit) {
 
 // ── Phone menu drawer ────────────────────────────────────────────────────────
 
-private const val PREFS_NAME   = "zinwa_settings"
-private const val KEY_BLOCK_UNKNOWN = "block_unknown_callers"
-private const val KEY_CALL_RECORDING = "call_recording_enabled"
-
 @Composable
 private fun PhoneMenuDrawer(onDismiss: () -> Unit, viewModel: DialerViewModel) {
     val context = LocalContext.current
     var showClearDialog by remember { mutableStateOf(false) }
-    var showSettingsPage by remember { mutableStateOf(false) }
-
-    val prefs: SharedPreferences = remember {
-        context.getSharedPreferences(PREFS_NAME, android.content.Context.MODE_PRIVATE)
-    }
-    var blockUnknown by remember { mutableStateOf(prefs.getBoolean(KEY_BLOCK_UNKNOWN, false)) }
-    var callRecordingEnabled by remember { mutableStateOf(prefs.getBoolean(KEY_CALL_RECORDING, false)) }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -993,122 +980,51 @@ private fun PhoneMenuDrawer(onDismiss: () -> Unit, viewModel: DialerViewModel) {
             Spacer(Modifier.height(56.dp))
 
             Text(
-                text     = if (showSettingsPage) "Settings" else "Phone",
+                text     = "Phone",
                 color    = TextPrimary,
                 style    = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp)
             )
 
             Spacer(Modifier.height(12.dp))
-            if (!showSettingsPage) {
-                DrawerMenuItem(
-                    icon  = Icons.Default.Contacts,
-                    label = "Contacts"
-                ) {
-                    context.startActivity(
-                        Intent(Intent.ACTION_VIEW, ContactsContract.Contacts.CONTENT_URI)
-                    )
-                    onDismiss()
-                }
 
-                DrawerMenuItem(
-                    icon  = Icons.Default.Settings,
-                    label = "Settings"
-                ) { showSettingsPage = true }
+            DrawerMenuItem(
+                icon  = Icons.Default.Contacts,
+                label = "Contacts"
+            ) {
+                context.startActivity(
+                    Intent(Intent.ACTION_VIEW, ContactsContract.Contacts.CONTENT_URI)
+                )
+                onDismiss()
+            }
 
-                DrawerMenuItem(
-                    icon  = Icons.Default.History,
-                    label = "Clear call history"
-                ) {
-                    showClearDialog = true
-                }
+            DrawerMenuItem(
+                icon  = Icons.Default.Settings,
+                label = "Settings"
+            ) {
+                context.startActivity(Intent(context, com.zinwa.dialer.SettingsActivity::class.java))
+                onDismiss()
+            }
 
-                DrawerMenuItem(
-                    icon  = Icons.Default.Help,
-                    label = "Help & feedback"
-                ) {
-                    context.startActivity(
-                        Intent(Intent.ACTION_SENDTO).apply {
-                            data    = Uri.parse("mailto:")
-                            putExtra(Intent.EXTRA_EMAIL,   arrayOf("support@zinwa.app"))
-                            putExtra(Intent.EXTRA_SUBJECT, "Zinwa Dialer — Feedback")
-                        }
-                    )
-                    onDismiss()
-                }
-            } else {
-                DrawerSettingsItem(icon = Icons.Default.Home, label = "Back") {
-                    showSettingsPage = false
-                }
+            DrawerMenuItem(
+                icon  = Icons.Default.History,
+                label = "Clear call history"
+            ) {
+                showClearDialog = true
+            }
 
-                SettingsSectionTitle("Call Assist")
-
-                DrawerSettingsItem(icon = Icons.Default.Block, label = "Caller ID & spam") {
-                    blockUnknown = !blockUnknown
-                    prefs.edit().putBoolean(KEY_BLOCK_UNKNOWN, blockUnknown).apply()
-                }
-
-                SettingsSectionTitle("General")
-
-                DrawerSettingsItem(icon = Icons.Default.Phone, label = "Calls") {
-                    openSystemOrAppSettings(context, Intent("android.settings.CALL_SETTINGS"))
-                }
-                DrawerSettingsItem(icon = Icons.Default.Menu, label = "Display options") {
-                    openSystemOrAppSettings(context, Intent(Settings.ACTION_DISPLAY_SETTINGS))
-                }
-                DrawerSettingsItem(icon = Icons.Default.Dialpad, label = "Incoming call gesture") {
-                    openSystemOrAppSettings(context, Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
-                }
-                DrawerSettingsItem(icon = Icons.Default.Mic, label = "Quick responses") {
-                    openSystemOrAppSettings(context, Intent("android.settings.CALL_SETTINGS"))
-                }
-                DrawerSettingsItem(icon = Icons.Default.History, label = "Sounds and vibration") {
-                    openSystemOrAppSettings(context, Intent(Settings.ACTION_SOUND_SETTINGS))
-                }
-                DrawerSettingsItem(icon = Icons.Default.Help, label = "Voicemail") {
-                    openSystemOrAppSettings(context, Intent("android.settings.CALL_SETTINGS"))
-                }
-                DrawerSettingsItem(icon = Icons.Default.Contacts, label = "Contact ringtones") {
-                    openSystemOrAppSettings(context, Intent(Settings.ACTION_SOUND_SETTINGS))
-                }
-                DrawerSettingsItem(icon = Icons.Default.PersonAdd, label = "Calling card") {
-                    openSystemOrAppSettings(context, Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                        data = Uri.parse("package:${context.packageName}")
-                    })
-                }
-
-                SettingsSectionTitle("Advanced")
-
-                DrawerSettingsItem(icon = Icons.Default.Phone, label = "Caller ID announcement") {
-                    openSystemOrAppSettings(context, Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
-                }
-                DrawerSettingsItem(icon = Icons.Default.History, label = "Flip To Silence") {
-                    openSystemOrAppSettings(context, Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
-                }
-
-                DrawerMenuToggle(
-                    icon    = Icons.Default.History,
-                    label   = "Call recording",
-                    checked = callRecordingEnabled,
-                    onToggle = { enabled ->
-                        callRecordingEnabled = enabled
-                        prefs.edit().putBoolean(KEY_CALL_RECORDING, enabled).apply()
+            DrawerMenuItem(
+                icon  = Icons.Default.Help,
+                label = "Help & feedback"
+            ) {
+                context.startActivity(
+                    Intent(Intent.ACTION_SENDTO).apply {
+                        data    = Uri.parse("mailto:")
+                        putExtra(Intent.EXTRA_EMAIL,   arrayOf("support@zinwa.app"))
+                        putExtra(Intent.EXTRA_SUBJECT, "Zinwa Dialer — Feedback")
                     }
                 )
-
-                DrawerSettingsItem(icon = Icons.Default.Block, label = "Blocked numbers (coming soon)") {}
-                DrawerSettingsItem(icon = Icons.Default.Settings, label = "Accessibility") {
-                    openSystemOrAppSettings(context, Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
-                }
-                DrawerSettingsItem(icon = Icons.Default.Phone, label = "Assisted dialing") {
-                    openSystemOrAppSettings(context, Intent("android.settings.CALL_SETTINGS"))
-                }
-                DrawerSettingsItem(icon = Icons.Default.Contacts, label = "Nearby places") {
-                    openSystemOrAppSettings(
-                        context,
-                        Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=nearby+places"))
-                    )
-                }
+                onDismiss()
             }
         }
     }
@@ -1132,87 +1048,6 @@ private fun PhoneMenuDrawer(onDismiss: () -> Unit, viewModel: DialerViewModel) {
     }
 }
 
-private fun openSystemOrAppSettings(context: android.content.Context, intent: Intent) {
-    runCatching { context.startActivity(intent) }
-        .onFailure {
-            context.startActivity(
-                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                    data = Uri.parse("package:${context.packageName}")
-                }
-            )
-        }
-}
-
-@Composable
-private fun SettingsSectionTitle(title: String) {
-    Text(
-        text = title,
-        color = Color(0xFF9A9A9A),
-        style = MaterialTheme.typography.titleSmall,
-        modifier = Modifier.padding(horizontal = 24.dp, vertical = 10.dp)
-    )
-}
-
-@Composable
-private fun DrawerSettingsItem(icon: ImageVector, label: String, onClick: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 3.dp)
-            .clip(RoundedCornerShape(10.dp))
-            .background(Color(0xFF121315))
-            .clickable { onClick() }
-            .padding(horizontal = 18.dp, vertical = 14.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = label,
-            tint = Color(0xFFCFCFCF),
-            modifier = Modifier.size(24.dp)
-        )
-        Text(
-            text = label,
-            color = Color(0xFFE7E7E7),
-            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Normal)
-        )
-    }
-}
-
-@Composable
-private fun DrawerMenuToggle(
-    icon:     ImageVector,
-    label:    String,
-    checked:  Boolean,
-    onToggle: (Boolean) -> Unit
-) {
-    Row(
-        modifier          = Modifier
-            .fillMaxWidth()
-            .clickable { onToggle(!checked) }
-            .padding(horizontal = 24.dp, vertical = 14.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(20.dp)
-    ) {
-        Icon(
-            imageVector        = icon,
-            contentDescription = label,
-            tint               = if (checked) AccentGreen else Color(0xFFAAAAAA),
-            modifier           = Modifier.size(24.dp)
-        )
-        Text(
-            text     = label,
-            color    = TextPrimary,
-            style    = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.weight(1f)
-        )
-        androidx.compose.material3.Switch(
-            checked         = checked,
-            onCheckedChange = onToggle
-        )
-    }
-}
 
 @Composable
 private fun DrawerMenuItem(icon: ImageVector, label: String, onClick: () -> Unit) {
