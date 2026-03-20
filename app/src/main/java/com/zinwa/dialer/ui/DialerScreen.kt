@@ -70,6 +70,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import com.zinwa.dialer.ui.theme.LocalDialerColors
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -109,12 +110,24 @@ import kotlin.math.abs
 
 // ── Static palette ───────────────────────────────────────────────────────────
 
-internal val BgPage            = Color(0xFF1A1C1E)
-internal val BgSurface         = Color(0xFF252830)
-internal val BgElevated        = Color(0xFF303340)
-internal val TextPrimary       = Color(0xFFE3E2E6)
-internal val TextSecondary     = Color(0xFF9093A0)
-internal val TextHint          = Color(0xFF44474F)
+internal val BgPage: Color
+    @Composable get() = LocalDialerColors.current.bgPage
+
+internal val BgSurface: Color
+    @Composable get() = LocalDialerColors.current.bgSurface
+
+internal val BgElevated: Color
+    @Composable get() = LocalDialerColors.current.bgElevated
+
+internal val TextPrimary: Color
+    @Composable get() = LocalDialerColors.current.textPrimary
+
+internal val TextSecondary: Color
+    @Composable get() = LocalDialerColors.current.textSecondary
+
+internal val TextHint: Color
+    @Composable get() = LocalDialerColors.current.textHint
+
 internal val AccentGreen       = Color(0xFF6BCB77)
 internal val AccentGreenBright = Color(0xFF69F0AE)
 

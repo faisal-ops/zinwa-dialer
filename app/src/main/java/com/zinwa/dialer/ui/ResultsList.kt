@@ -261,7 +261,7 @@ fun ResultsList(
         ModalBottomSheet(
             onDismissRequest = { dismissSheet() },
             sheetState       = sheetState,
-            containerColor   = Color(0xFF1C1C1C),
+            containerColor   = MaterialTheme.colorScheme.surfaceContainerHigh,
             tonalElevation   = 0.dp
         ) {
             Column(
@@ -296,7 +296,7 @@ fun ResultsList(
                 }
             }
 
-            HorizontalDivider(color = Color(0xFF2A2A2A))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
             // Options
             SheetOption(
@@ -609,7 +609,7 @@ private fun ContactRow(
                 .size(36.dp)
                 .clip(CircleShape)
                 .clickable { onCallTap() }
-                .background(Color(0xFF1E1E1E)),
+                .background(MaterialTheme.colorScheme.surfaceContainerLow),
             contentAlignment = Alignment.Center
         ) {
             Icon(
@@ -634,7 +634,7 @@ private fun ExpandedPanel(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFF1A1A1A))
+            .background(MaterialTheme.colorScheme.surfaceContainerLowest)
             .padding(start = 66.dp, end = 14.dp, top = 4.dp, bottom = 8.dp)
     ) {
         // Last call time
@@ -691,7 +691,7 @@ private fun ExpandedActionButton(
     Column(
         modifier = modifier
             .clip(RoundedCornerShape(12.dp))
-            .background(Color(0xFF2A2A2A))
+            .background(MaterialTheme.colorScheme.surfaceContainerLow)
             .clickable { onClick() }
             .padding(vertical = 10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
