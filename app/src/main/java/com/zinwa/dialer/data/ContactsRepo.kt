@@ -19,6 +19,10 @@ class ContactsRepo(private val context: Context) {
     fun invalidate() { cache = null }
 
     private fun loadAll(): List<Contact> {
+        val prefs = context.getSharedPreferences("zinwa_settings", Context.MODE_PRIVATE)
+        val sortBy = prefs.getInt("sort_by", 0) // 0=first name, 1=last name
+        val nameFormat = prefs.getInt("name_format", 0) // 0=first name first, 1=last name first
+
         val uri        = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
         val projection = arrayOf(
             ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
@@ -53,13 +57,25 @@ class ContactsRepo(private val context: Context) {
                 val number = it.getString(numCol).orEmpty().trim()
                 if (number.isEmpty()) continue
 
-                val name  = it.getString(nameCol).orEmpty().trim().ifEmpty { number }
+                val rawName = it.getString(nameCol).orEmpty().trim().ifEmpty { number }
+                val name = if (nameFormat == 1 && rawName != number) {
+                    val parts = rawName.split(" ", limit = 2)
+                    if (parts.size == 2) "${parts[1]}, ${parts[0]}" else rawName
+                } else rawName
                 val photo = if (photoCol >= 0) it.getString(photoCol) else null
 
                 contacts.add(Contact(id = id, name = name, number = number, photoUri = photo))
             }
         }
 
-        return contacts
+        // Sort by last name if preference is set
+        return if (sortBy == 1) {
+            contacts.sortedBy { c ->
+                val parts = c.name.split(" ")
+                if (parts.size > 1) parts.last() else c.name
+            }
+        } else {
+            contacts
+        }
     }
 }
