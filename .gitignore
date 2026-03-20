@@ -22,3 +22,7 @@ keystore.properties
 
 # Local config
 local.properties
+
+# IDE / editor
+*.code-workspace
+.cursor/
