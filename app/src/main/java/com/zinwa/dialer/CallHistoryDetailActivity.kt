@@ -197,7 +197,7 @@ private fun CallHistoryDetailScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(vertical = 3.dp)
-                                .background(Color(0xFF1C1C1C), RoundedCornerShape(12.dp))
+                                .background(MaterialTheme.colorScheme.surfaceContainerHigh, RoundedCornerShape(12.dp))
                                 .padding(horizontal = 14.dp, vertical = 12.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -229,7 +229,7 @@ private fun CallHistoryDetailScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xFF1A1A1A))
+                .background(MaterialTheme.colorScheme.surfaceContainerLowest)
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
@@ -279,7 +279,7 @@ private fun ActionButton(
             modifier = Modifier
                 .size(44.dp)
                 .clip(CircleShape)
-                .background(Color(0xFF2A2A2A)),
+                .background(MaterialTheme.colorScheme.surfaceContainerHigh),
             contentAlignment = Alignment.Center
         ) {
             Icon(icon, contentDescription = label, tint = TextSecondary, modifier = Modifier.size(22.dp))
