@@ -2,6 +2,14 @@
 
 A native Android dialer app built for the **Zinwa Q25**, optimized for square displays (720x720) with full physical keyboard and D-pad support.
 
+---
+
+[![Downloads](https://img.shields.io/github/downloads/faisal-ops/zinwa-dialer/total?style=flat-square&label=downloads)](https://github.com/faisal-ops/zinwa-dialer/releases)
+
+[![DOWNLOAD](https://img.shields.io/badge/DOWNLOAD-blue?style=for-the-badge)](https://github.com/faisal-ops/zinwa-dialer/releases/latest/download/zinwa-dialer-v0.1.0-alpha.apk) [![PRE-RELEASE](https://img.shields.io/badge/PRE--RELEASE-orange?style=for-the-badge)](https://github.com/faisal-ops/zinwa-dialer/releases)
+
+---
+
 > **Early Development** — This project is under active development. Expect breaking changes between releases.
 
 ## Features
