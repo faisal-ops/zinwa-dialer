@@ -26,7 +26,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Block
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.ChevronRight
@@ -39,7 +39,7 @@ import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.QuestionAnswer
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Voicemail
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.RadioButton
@@ -635,7 +635,7 @@ private fun SettingsTopBar(title: String, onBack: () -> Unit) {
             modifier = Modifier.size(48.dp).clip(CircleShape).clickable { onBack() },
             contentAlignment = Alignment.Center
         ) {
-            Icon(Icons.Default.ArrowBack, "Back", tint = TextPrimary, modifier = Modifier.size(22.dp))
+            Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back", tint = TextPrimary, modifier = Modifier.size(22.dp))
         }
         Text(title, color = TextPrimary, fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
     }
@@ -786,7 +786,7 @@ private fun PickerRow(
 
 @Composable
 private fun SettingsDivider() {
-    Divider(color = MaterialTheme.colorScheme.outlineVariant, thickness = 0.5.dp, modifier = Modifier.padding(horizontal = 20.dp))
+    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant, thickness = 0.5.dp, modifier = Modifier.padding(horizontal = 20.dp))
 }
 
 @Composable

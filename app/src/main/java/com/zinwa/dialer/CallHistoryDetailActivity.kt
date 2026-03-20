@@ -25,14 +25,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.CallMade
-import androidx.compose.material.icons.filled.CallMissed
-import androidx.compose.material.icons.filled.CallReceived
-import androidx.compose.material.icons.filled.Message
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.CallMade
+import androidx.compose.material.icons.automirrored.filled.CallMissed
+import androidx.compose.material.icons.automirrored.filled.CallReceived
+import androidx.compose.material.icons.automirrored.filled.Message
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material.icons.filled.PhoneCallback
+import androidx.compose.material.icons.automirrored.filled.PhoneCallback
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -133,7 +133,7 @@ private fun CallHistoryDetailScreen(
                     .clickable { onBack() },
                 contentAlignment = Alignment.Center
             ) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = TextPrimary)
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = TextPrimary)
             }
 
             Spacer(Modifier.width(4.dp))
@@ -254,7 +254,7 @@ private fun CallHistoryDetailScreen(
 
             // Message button
             ActionButton(
-                icon = Icons.Default.Message,
+                icon = Icons.AutoMirrored.Filled.Message,
                 label = "Message",
                 onClick = onMessage
             )
@@ -290,10 +290,10 @@ private fun ActionButton(
 }
 
 private fun callTypeIcon(type: Int) = when (type) {
-    CallLog.Calls.MISSED_TYPE    -> Icons.Default.CallMissed to Color(0xFFCC4444)
-    CallLog.Calls.INCOMING_TYPE  -> Icons.Default.CallReceived to Color(0xFF6BCB77)
-    CallLog.Calls.OUTGOING_TYPE  -> Icons.Default.CallMade to Color(0xFF6BCB77)
-    else                         -> Icons.Default.PhoneCallback to Color(0xFF888888)
+    CallLog.Calls.MISSED_TYPE    -> Icons.AutoMirrored.Filled.CallMissed to Color(0xFFCC4444)
+    CallLog.Calls.INCOMING_TYPE  -> Icons.AutoMirrored.Filled.CallReceived to Color(0xFF6BCB77)
+    CallLog.Calls.OUTGOING_TYPE  -> Icons.AutoMirrored.Filled.CallMade to Color(0xFF6BCB77)
+    else                         -> Icons.AutoMirrored.Filled.PhoneCallback to Color(0xFF888888)
 }
 
 private fun callTypeLabel(type: Int) = when (type) {

@@ -34,9 +34,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CallMade
-import androidx.compose.material.icons.filled.CallMissed
-import androidx.compose.material.icons.filled.CallReceived
+import androidx.compose.material.icons.automirrored.filled.CallMade
+import androidx.compose.material.icons.automirrored.filled.CallMissed
+import androidx.compose.material.icons.automirrored.filled.CallReceived
 import androidx.compose.material.icons.filled.Block
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Delete
@@ -47,7 +47,7 @@ import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PersonAdd
 import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material.icons.filled.PhoneCallback
+import androidx.compose.material.icons.automirrored.filled.PhoneCallback
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -60,7 +60,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.material.icons.filled.Message
+import androidx.compose.material.icons.automirrored.filled.Message
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -666,7 +666,7 @@ private fun ExpandedPanel(
                 modifier = Modifier.weight(1f)
             )
             ExpandedActionButton(
-                icon = Icons.Default.Message,
+                icon = Icons.AutoMirrored.Filled.Message,
                 label = "Message",
                 onClick = onMessage,
                 modifier = Modifier.weight(1f)
@@ -776,13 +776,13 @@ internal fun ContactAvatar(name: String, photoUri: String?, size: Int) {
 private fun CallTypeIcon(callType: Int, selected: Boolean) {
     val (icon, color) = when (callType) {
         CallLog.Calls.MISSED_TYPE ->
-            Icons.Default.CallMissed to if (selected) Color(0xFFFF6B6B) else Color(0xFFCC3333)
+            Icons.AutoMirrored.Filled.CallMissed to if (selected) Color(0xFFFF6B6B) else Color(0xFFCC3333)
         CallLog.Calls.INCOMING_TYPE ->
-            Icons.Default.CallReceived to if (selected) AccentGreen else TextSecondary
+            Icons.AutoMirrored.Filled.CallReceived to if (selected) AccentGreen else TextSecondary
         CallLog.Calls.OUTGOING_TYPE ->
-            Icons.Default.CallMade to if (selected) AccentGreen else TextSecondary
+            Icons.AutoMirrored.Filled.CallMade to if (selected) AccentGreen else TextSecondary
         else ->
-            Icons.Default.PhoneCallback to TextSecondary
+            Icons.AutoMirrored.Filled.PhoneCallback to TextSecondary
     }
     Icon(
         imageVector        = icon,

@@ -389,7 +389,7 @@ class MainActivity : ComponentActivity() {
         androidx.compose.foundation.layout.Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(androidx.compose.ui.graphics.Color(0xFF121212)),
+                .background(androidx.compose.material3.MaterialTheme.colorScheme.background),
             contentAlignment = Alignment.Center
         ) {
             androidx.compose.foundation.layout.Column(
@@ -401,7 +401,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier
                         .size(80.dp)
                         .background(
-                            androidx.compose.ui.graphics.Color(0xFF2A2A2A),
+                            androidx.compose.material3.MaterialTheme.colorScheme.surfaceContainerHigh,
                             androidx.compose.foundation.shape.CircleShape
                         ),
                     contentAlignment = Alignment.Center
@@ -409,7 +409,7 @@ class MainActivity : ComponentActivity() {
                     androidx.compose.material3.Icon(
                         imageVector = Icons.Default.Phone,
                         contentDescription = null,
-                        tint = androidx.compose.ui.graphics.Color.White,
+                        tint = androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.size(36.dp)
                     )
                 }
@@ -418,7 +418,7 @@ class MainActivity : ComponentActivity() {
 
                 androidx.compose.material3.Text(
                     text = "Set Phone as default",
-                    color = androidx.compose.ui.graphics.Color.White,
+                    color = androidx.compose.material3.MaterialTheme.colorScheme.onBackground,
                     style = androidx.compose.material3.MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -427,7 +427,7 @@ class MainActivity : ComponentActivity() {
 
                 androidx.compose.material3.Text(
                     text = "Phone can only start & receive calls if it's your default phone app",
-                    color = androidx.compose.ui.graphics.Color(0xFF999999),
+                    color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant,
                     style = androidx.compose.material3.MaterialTheme.typography.bodyMedium,
                     textAlign = androidx.compose.ui.text.style.TextAlign.Center
                 )
@@ -438,7 +438,7 @@ class MainActivity : ComponentActivity() {
                 androidx.compose.foundation.layout.Box(
                     modifier = Modifier
                         .background(
-                            androidx.compose.ui.graphics.Color.White,
+                            androidx.compose.material3.MaterialTheme.colorScheme.inverseSurface,
                             androidx.compose.foundation.shape.RoundedCornerShape(28.dp)
                         )
                         .clickable {
@@ -455,7 +455,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     androidx.compose.material3.Text(
                         text = "Set as default",
-                        color = androidx.compose.ui.graphics.Color.Black,
+                        color = androidx.compose.material3.MaterialTheme.colorScheme.inverseOnSurface,
                         style = androidx.compose.material3.MaterialTheme.typography.labelLarge,
                         fontWeight = FontWeight.SemiBold
                     )

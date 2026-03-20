@@ -54,12 +54,12 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Backspace
+import androidx.compose.material.icons.automirrored.filled.Backspace
 import androidx.compose.material.icons.filled.Block
 import androidx.compose.material.icons.filled.Contacts
 import androidx.compose.material.icons.filled.Dialpad
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Help
+import androidx.compose.material.icons.automirrored.filled.Help
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
@@ -668,7 +668,7 @@ private fun KeypadContent(state: DialerUiState, viewModel: DialerViewModel) {
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector        = Icons.Default.Backspace,
+                        imageVector        = Icons.AutoMirrored.Filled.Backspace,
                         contentDescription = "Delete",
                         tint               = if (hasInput) TextSecondary else TextHint,
                         modifier           = Modifier.size(backBtnSz * 0.42f)
@@ -1027,7 +1027,7 @@ private fun PhoneMenuDrawer(onDismiss: () -> Unit, viewModel: DialerViewModel) {
             }
 
             DrawerMenuItem(
-                icon  = Icons.Default.Help,
+                icon  = Icons.AutoMirrored.Filled.Help,
                 label = "Help & feedback"
             ) {
                 context.startActivity(

@@ -43,8 +43,9 @@ import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PersonAdd
 import androidx.compose.material.icons.filled.SwapCalls
 import androidx.compose.material.icons.filled.Dialpad
-import androidx.compose.material.icons.filled.VolumeUp
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -216,7 +217,7 @@ private fun InCallScreen(vm: InCallViewModel, onQuickReply: (String) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF121212)),
+            .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // ── Top content: avatar + name + number ──────────────────────────
@@ -251,7 +252,7 @@ private fun InCallScreen(vm: InCallViewModel, onQuickReply: (String) -> Unit) {
 
         Text(
             text = displayName,
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onBackground,
             fontSize = 20.sp,
             fontWeight = FontWeight.SemiBold,
             maxLines = 1,
@@ -264,7 +265,7 @@ private fun InCallScreen(vm: InCallViewModel, onQuickReply: (String) -> Unit) {
             Spacer(Modifier.height(3.dp))
             Text(
                 text = number,
-                color = Color(0xFF8A8A8A),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontSize = 13.sp,
                 textAlign = TextAlign.Center
             )
@@ -332,11 +333,15 @@ private fun InCallScreen(vm: InCallViewModel, onQuickReply: (String) -> Unit) {
                         )
                     }
                     Spacer(Modifier.height(14.dp))
-                    val quickReplies = listOf(
-                        "Can't talk now, call you back.",
-                        "In a meeting, call you in 10 mins.",
-                        "Please text me."
-                    )
+                    val prefs = context.getSharedPreferences("zinwa_settings", android.content.Context.MODE_PRIVATE)
+                    val quickReplies = (0..3).map { i ->
+                        prefs.getString("quick_response_$i", null) ?: listOf(
+                            "Can't talk now. What's up?",
+                            "I'll call you right back.",
+                            "I'll call you later.",
+                            "Can't talk now. Call me later?"
+                        )[i]
+                    }
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -348,14 +353,14 @@ private fun InCallScreen(vm: InCallViewModel, onQuickReply: (String) -> Unit) {
                                 modifier = Modifier
                                     .weight(1f)
                                     .clip(RoundedCornerShape(16.dp))
-                                    .background(Color(0xFF1E1E1E))
+                                    .background(MaterialTheme.colorScheme.surfaceContainerHigh)
                                     .clickable { onQuickReply(msg) }
                                     .padding(horizontal = 10.dp, vertical = 8.dp),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
                                     text = msg,
-                                    color = Color(0xFFB5B5B5),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     maxLines = 2,
                                     overflow = TextOverflow.Ellipsis,
                                     fontSize = 10.sp,
@@ -376,8 +381,8 @@ private fun InCallScreen(vm: InCallViewModel, onQuickReply: (String) -> Unit) {
                         SmallActionButton(
                             icon    = if (micMuted) Icons.Default.MicOff else Icons.Default.Mic,
                             label   = "Mute",
-                            color   = if (micMuted) Color(0xFFFFAA00) else Color(0xFF999999),
-                            bgColor = if (micMuted) Color(0xFF332200) else Color(0xFF1E1E1E),
+                            color   = if (micMuted) Color(0xFFFFAA00) else MaterialTheme.colorScheme.onSurfaceVariant,
+                            bgColor = if (micMuted) Color(0xFF332200) else MaterialTheme.colorScheme.surfaceContainerHigh,
                             onClick = {
                                 micMuted = !micMuted
                                 com.zinwa.dialer.service.MyInCallService.instance?.applyMute(micMuted)
@@ -386,7 +391,7 @@ private fun InCallScreen(vm: InCallViewModel, onQuickReply: (String) -> Unit) {
                         SmallActionButton(
                             icon = Icons.Default.Dialpad,
                             label = "Keypad",
-                            color = Color(0xFF999999),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             onClick = {
                                 // Keep InCallActivity in back stack — user returns via Back key.
                                 context.startActivity(
@@ -398,10 +403,10 @@ private fun InCallScreen(vm: InCallViewModel, onQuickReply: (String) -> Unit) {
                             }
                         )
                         SmallActionButton(
-                            icon    = Icons.Default.VolumeUp,
+                            icon    = Icons.AutoMirrored.Filled.VolumeUp,
                             label   = "Speaker",
-                            color   = if (speakerOn) Color(0xFF66CCFF) else Color(0xFF999999),
-                            bgColor = if (speakerOn) Color(0xFF1A2A3A) else Color(0xFF1E1E1E),
+                            color   = if (speakerOn) Color(0xFF66CCFF) else MaterialTheme.colorScheme.onSurfaceVariant,
+                            bgColor = if (speakerOn) Color(0xFF1A2A3A) else MaterialTheme.colorScheme.surfaceContainerHigh,
                             onClick = {
                                 speakerOn = !speakerOn
                                 com.zinwa.dialer.service.MyInCallService.instance?.applySpeaker(speakerOn)
@@ -421,7 +426,7 @@ private fun InCallScreen(vm: InCallViewModel, onQuickReply: (String) -> Unit) {
                         SmallActionButton(
                             icon = Icons.Default.PersonAdd,
                             label = "Add Call",
-                            color = Color(0xFF999999),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             onClick = {
                                 // Hold current call, open dialer to place a second call.
                                 // InCallActivity stays in back stack — user returns via Back key.
@@ -444,8 +449,8 @@ private fun InCallScreen(vm: InCallViewModel, onQuickReply: (String) -> Unit) {
                         SmallActionButton(
                             icon    = Icons.Default.Pause,
                             label   = if (state == Call.STATE_HOLDING) "Unhold" else "Hold",
-                            color   = if (state == Call.STATE_HOLDING) Color(0xFFFFDD00) else Color(0xFF999999),
-                            bgColor = if (state == Call.STATE_HOLDING) Color(0xFF2A2200) else Color(0xFF1E1E1E),
+                            color   = if (state == Call.STATE_HOLDING) Color(0xFFFFDD00) else MaterialTheme.colorScheme.onSurfaceVariant,
+                            bgColor = if (state == Call.STATE_HOLDING) Color(0xFF2A2200) else MaterialTheme.colorScheme.surfaceContainerHigh,
                             onClick = {
                                 if (state == Call.STATE_HOLDING) CallStateHolder.unhold()
                                 else CallStateHolder.hold()
@@ -466,8 +471,8 @@ private fun SecondaryCallBanner(info: ActiveCallInfo, onSwitch: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 24.dp)
-            .border(1.dp, Color(0xFF333333), androidx.compose.foundation.shape.RoundedCornerShape(12.dp))
-            .background(Color(0xFF1A1A1A), androidx.compose.foundation.shape.RoundedCornerShape(12.dp))
+            .border(1.dp, MaterialTheme.colorScheme.outlineVariant, androidx.compose.foundation.shape.RoundedCornerShape(12.dp))
+            .background(MaterialTheme.colorScheme.surfaceContainerLowest, androidx.compose.foundation.shape.RoundedCornerShape(12.dp))
             .padding(horizontal = 16.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
@@ -475,7 +480,7 @@ private fun SecondaryCallBanner(info: ActiveCallInfo, onSwitch: () -> Unit) {
         Column {
             Text(
                 text       = info.displayName,
-                color      = Color(0xFFCCCCCC),
+                color      = MaterialTheme.colorScheme.onSurface,
                 fontSize   = 13.sp,
                 fontWeight = FontWeight.Medium,
                 maxLines   = 1,
@@ -492,7 +497,7 @@ private fun SecondaryCallBanner(info: ActiveCallInfo, onSwitch: () -> Unit) {
             modifier = Modifier
                 .size(36.dp)
                 .clip(CircleShape)
-                .background(Color(0xFF2A3A2A))
+                .background(MaterialTheme.colorScheme.surfaceContainerHigh)
                 .clickable { onSwitch() },
             contentAlignment = Alignment.Center
         ) {
@@ -539,9 +544,10 @@ private fun SmallActionButton(
     icon: ImageVector,
     label: String,
     color: Color,
-    bgColor: Color = Color(0xFF1E1E1E),
+    bgColor: Color = Color.Unspecified,
     onClick: () -> Unit
 ) {
+    val resolvedBg = if (bgColor == Color.Unspecified) MaterialTheme.colorScheme.surfaceContainerHigh else bgColor
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.width(64.dp)
@@ -550,7 +556,7 @@ private fun SmallActionButton(
             modifier = Modifier
                 .size(48.dp)
                 .clip(CircleShape)
-                .background(bgColor)
+                .background(resolvedBg)
                 .clickable { onClick() },
             contentAlignment = Alignment.Center
         ) {
@@ -564,7 +570,7 @@ private fun SmallActionButton(
         Spacer(Modifier.height(6.dp))
         Text(
             text = label,
-            color = Color(0xFF777777),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             fontSize = 11.sp,
             textAlign = TextAlign.Center,
             maxLines = 1
