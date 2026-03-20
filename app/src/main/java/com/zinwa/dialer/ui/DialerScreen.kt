@@ -387,7 +387,7 @@ private fun FavoritesContent(state: DialerUiState, viewModel: DialerViewModel, o
             if (state.pinnedFavorites.isEmpty()) {
                 Text(
                     text     = "Long-press any contact below to pin them here",
-                    color    = Color(0xFF444444),
+                    color    = TextHint,
                     style    = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
                 )
@@ -417,7 +417,7 @@ private fun FavoritesContent(state: DialerUiState, viewModel: DialerViewModel, o
             item {
                 Text(
                     text     = "No suggestions yet",
-                    color    = Color(0xFF444444),
+                    color    = TextHint,
                     style    = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                 )
@@ -474,7 +474,7 @@ private fun SuggestionRow(
                 .size(36.dp)
                 .clip(CircleShape)
                 .clickable { if (isPinned) onUnpin() else onPin() }
-                .background(Color(0xFF1E1E1E)),
+                .background(BgSurface),
             contentAlignment = Alignment.Center
         ) {
             Icon(
@@ -491,7 +491,7 @@ private fun SuggestionRow(
                 .size(36.dp)
                 .clip(CircleShape)
                 .clickable { onCall() }
-                .background(Color(0xFF1E1E1E)),
+                .background(BgSurface),
             contentAlignment = Alignment.Center
         ) {
             Icon(
@@ -641,7 +641,7 @@ private fun KeypadContent(state: DialerUiState, viewModel: DialerViewModel) {
                     modifier = Modifier
                         .size(callBtnSz)
                         .clip(CircleShape)
-                        .background(if (canCall) AccentGreen else Color(0xFF1A1A1A))
+                        .background(if (canCall) AccentGreen else MaterialTheme.colorScheme.surfaceContainerLowest)
                         .clickable(enabled = canCall) {
                             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                             viewModel.callSelected()
@@ -651,7 +651,7 @@ private fun KeypadContent(state: DialerUiState, viewModel: DialerViewModel) {
                     Icon(
                         imageVector        = Icons.Default.Phone,
                         contentDescription = "Call",
-                        tint               = if (canCall) Color.White else Color(0xFF3A3A3A),
+                        tint               = if (canCall) Color.White else TextHint,
                         modifier           = Modifier.size(callBtnSz * 0.42f)
                     )
                 }
@@ -670,7 +670,7 @@ private fun KeypadContent(state: DialerUiState, viewModel: DialerViewModel) {
                     Icon(
                         imageVector        = Icons.Default.Backspace,
                         contentDescription = "Delete",
-                        tint               = if (hasInput) TextSecondary else Color(0xFF2A2A2A),
+                        tint               = if (hasInput) TextSecondary else TextHint,
                         modifier           = Modifier.size(backBtnSz * 0.42f)
                     )
                 }
@@ -714,7 +714,7 @@ private fun BottomNavBar(current: DialerTab, onSelect: (DialerTab) -> Unit) {
     Row(
         modifier              = Modifier
             .fillMaxWidth()
-            .background(Color(0xFF161616))
+            .background(MaterialTheme.colorScheme.surfaceContainerLowest)
             .windowInsetsPadding(WindowInsets.navigationBars)
             .padding(top = 4.dp, bottom = 4.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
@@ -739,17 +739,17 @@ private fun NavItem(
     onClick:  () -> Unit
 ) {
     val iconColor by animateColorAsState(
-        targetValue   = if (selected) Color(0xFF111111) else Color(0xFF555555),
+        targetValue   = if (selected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
         animationSpec = tween(250),
         label         = "nav_icon_color"
     )
     val textColor by animateColorAsState(
-        targetValue   = if (selected) Color(0xFF2A2A2A) else Color(0xFF666666),
+        targetValue   = if (selected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
         animationSpec = tween(250),
         label         = "nav_text_color"
     )
     val selectedBg by animateColorAsState(
-        targetValue   = if (selected) Color(0xFFDCEBDD) else Color.Transparent,
+        targetValue   = if (selected) MaterialTheme.colorScheme.secondaryContainer else Color.Transparent,
         animationSpec = tween(250),
         label         = "nav_selected_bg"
     )
@@ -893,13 +893,13 @@ private fun FilterChipRow(current: FilterMode, onSelect: (FilterMode) -> Unit) {
             )
             val borderColor by animateColorAsState(
                 targetValue   = if (sel) MaterialTheme.colorScheme.outline
-                                else Color(0xFF333333),
+                                else MaterialTheme.colorScheme.outlineVariant,
                 animationSpec = tween(200),
                 label         = "chip_border_${chip.label}"
             )
             val textColor by animateColorAsState(
                 targetValue   = if (sel) MaterialTheme.colorScheme.onSecondaryContainer
-                                else Color(0xFF777777),
+                                else TextSecondary,
                 animationSpec = tween(200),
                 label         = "chip_text_${chip.label}"
             )
@@ -987,7 +987,7 @@ private fun PhoneMenuDrawer(onDismiss: () -> Unit, viewModel: DialerViewModel) {
                 .fillMaxHeight()
                 .fillMaxWidth(0.78f)
                 .align(Alignment.CenterStart)
-                .background(Color(0xFF1E1E1E))
+                .background(MaterialTheme.colorScheme.surfaceContainerLow)
                 .clickable(enabled = false) { }
         ) {
             Spacer(Modifier.height(56.dp))
@@ -1075,7 +1075,7 @@ private fun DrawerMenuItem(icon: ImageVector, label: String, onClick: () -> Unit
         Icon(
             imageVector        = icon,
             contentDescription = label,
-            tint               = Color(0xFFAAAAAA),
+            tint               = TextSecondary,
             modifier           = Modifier.size(24.dp)
         )
         Text(

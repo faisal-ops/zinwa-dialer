@@ -505,17 +505,17 @@ private fun EmptyState(modifier: Modifier = Modifier) {
             Icon(
                 imageVector        = Icons.Default.History,
                 contentDescription = null,
-                tint               = Color(0xFF2A2A2A),
+                tint               = TextHint,
                 modifier           = Modifier.size(56.dp)
             )
             Text(
                 text  = "No results",
-                color = Color(0xFF444444),
+                color = TextSecondary,
                 style = MaterialTheme.typography.bodyMedium
             )
             Text(
                 text  = "Your recent calls and contacts will appear here",
-                color = Color(0xFF333333),
+                color = TextSecondary,
                 style = MaterialTheme.typography.bodySmall
             )
         }
@@ -528,7 +528,7 @@ private fun EmptyState(modifier: Modifier = Modifier) {
 private fun DateHeaderRow(label: String) {
     Text(
         text     = label,
-        color    = Color(0xFF666666),
+        color    = TextSecondary,
         style    = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Medium),
         modifier = Modifier
             .padding(horizontal = 16.dp)
@@ -540,7 +540,7 @@ private fun DateHeaderRow(label: String) {
 private fun SectionLabelRow(title: String) {
     Text(
         text     = title.uppercase(),
-        color    = Color(0xFF555555),
+        color    = TextSecondary,
         style    = MaterialTheme.typography.labelSmall,
         modifier = Modifier
             .padding(horizontal = 16.dp)
@@ -778,11 +778,11 @@ private fun CallTypeIcon(callType: Int, selected: Boolean) {
         CallLog.Calls.MISSED_TYPE ->
             Icons.Default.CallMissed to if (selected) Color(0xFFFF6B6B) else Color(0xFFCC3333)
         CallLog.Calls.INCOMING_TYPE ->
-            Icons.Default.CallReceived to if (selected) AccentGreen else Color(0xFF666666)
+            Icons.Default.CallReceived to if (selected) AccentGreen else TextSecondary
         CallLog.Calls.OUTGOING_TYPE ->
-            Icons.Default.CallMade to if (selected) AccentGreen else Color(0xFF666666)
+            Icons.Default.CallMade to if (selected) AccentGreen else TextSecondary
         else ->
-            Icons.Default.PhoneCallback to Color(0xFF555555)
+            Icons.Default.PhoneCallback to TextSecondary
     }
     Icon(
         imageVector        = icon,

@@ -40,6 +40,7 @@ import androidx.compose.material.icons.filled.QuestionAnswer
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Voicemail
 import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
@@ -494,7 +495,7 @@ private fun VoicemailScreen(onBack: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text("Notifications", color = TextPrimary, fontSize = 16.sp, modifier = Modifier.weight(1f))
-            Icon(Icons.Default.ChevronRight, null, tint = Color(0xFF555555), modifier = Modifier.size(20.dp))
+            Icon(Icons.Default.ChevronRight, null, tint = TextSecondary, modifier = Modifier.size(20.dp))
         }
 
         Spacer(Modifier.height(8.dp))
@@ -516,7 +517,7 @@ private fun VoicemailScreen(onBack: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text("Advanced Settings", color = TextPrimary, fontSize = 16.sp, modifier = Modifier.weight(1f))
-            Icon(Icons.Default.ChevronRight, null, tint = Color(0xFF555555), modifier = Modifier.size(20.dp))
+            Icon(Icons.Default.ChevronRight, null, tint = TextSecondary, modifier = Modifier.size(20.dp))
         }
     }
 }
@@ -552,7 +553,7 @@ private fun ContactRingtonesScreen(onBack: () -> Unit) {
         Spacer(Modifier.height(32.dp))
 
         Box(
-            modifier = Modifier.clip(RoundedCornerShape(28.dp)).background(Color.White)
+            modifier = Modifier.clip(RoundedCornerShape(28.dp)).background(MaterialTheme.colorScheme.inverseSurface)
                 .clickable {
                     launchSafe(context, Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI))
                 }
@@ -560,9 +561,9 @@ private fun ContactRingtonesScreen(onBack: () -> Unit) {
             contentAlignment = Alignment.Center
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Default.PersonAdd, null, tint = Color.Black, modifier = Modifier.size(18.dp))
+                Icon(Icons.Default.PersonAdd, null, tint = MaterialTheme.colorScheme.inverseOnSurface, modifier = Modifier.size(18.dp))
                 Spacer(Modifier.width(8.dp))
-                Text("Add contact ringtone", color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                Text("Add contact ringtone", color = MaterialTheme.colorScheme.inverseOnSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
             }
         }
 
@@ -677,7 +678,7 @@ private fun SettingsNavItem(
                 Text(subtitle, color = TextSecondary, fontSize = 12.sp)
             }
         }
-        Icon(Icons.Default.ChevronRight, null, tint = Color(0xFF555555), modifier = Modifier.size(20.dp))
+        Icon(Icons.Default.ChevronRight, null, tint = TextSecondary, modifier = Modifier.size(20.dp))
     }
 }
 
@@ -703,7 +704,7 @@ private fun ToggleRow(
             checked = checked, onCheckedChange = onToggle,
             colors = SwitchDefaults.colors(
                 checkedThumbColor = Color.White, checkedTrackColor = AccentGreen,
-                uncheckedThumbColor = Color(0xFF888888), uncheckedTrackColor = BgElevated
+                uncheckedThumbColor = MaterialTheme.colorScheme.outline, uncheckedTrackColor = BgElevated
             )
         )
     }
@@ -733,10 +734,10 @@ private fun CardRow(text: String, buttonLabel: String, onClick: () -> Unit) {
         Text(text, color = TextSecondary, fontSize = 14.sp, modifier = Modifier.weight(1f))
         Spacer(Modifier.width(12.dp))
         Box(
-            modifier = Modifier.clip(RoundedCornerShape(20.dp)).background(Color.White)
+            modifier = Modifier.clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.inverseSurface)
                 .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
-            Text(buttonLabel, color = Color.Black, fontSize = 13.sp, fontWeight = FontWeight.Medium)
+            Text(buttonLabel, color = MaterialTheme.colorScheme.inverseOnSurface, fontSize = 13.sp, fontWeight = FontWeight.Medium)
         }
     }
 }
@@ -785,7 +786,7 @@ private fun PickerRow(
 
 @Composable
 private fun SettingsDivider() {
-    Divider(color = Color(0xFF333333), thickness = 0.5.dp, modifier = Modifier.padding(horizontal = 20.dp))
+    Divider(color = MaterialTheme.colorScheme.outlineVariant, thickness = 0.5.dp, modifier = Modifier.padding(horizontal = 20.dp))
 }
 
 @Composable
